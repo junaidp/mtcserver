@@ -11,6 +11,11 @@ openai_api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=openai_api_key)
 
 
+@app.route('/hello')
+def qa():
+    return "hello"
+
+
 @app.route('/qa')
 def qa():
     query = request.json.get('query')
@@ -19,6 +24,7 @@ def qa():
     prompt = prompts(query, customer, previous)
     response = model(prompt)
     return response
+
 
 
 def prompts(customer_query, customer_data, previous_chat):
