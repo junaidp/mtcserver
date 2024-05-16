@@ -8,16 +8,13 @@ from openai import OpenAI
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=openai_api_key)
-from  langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI
 
 from langchain_community.embeddings import OpenAIEmbeddings
-
 from langchain_community.document_loaders import JSONLoader
 from langchain_community.vectorstores import Chroma
-
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
-
 from langchain_community.chat_message_histories import ChatMessageHistory
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
