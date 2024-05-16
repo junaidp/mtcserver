@@ -2,11 +2,6 @@ import os
 
 from flask import Flask
 from flask import request
-from langchain_core.chat_history import BaseChatMessageHistory
-from langchain_core.output_parsers import StrOutputParser
-from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
-from langchain_core.runnables import RunnablePassthrough
-from langchain_core.runnables.history import RunnableWithMessageHistory
 
 app = Flask(__name__)
 from openai import OpenAI
@@ -14,27 +9,15 @@ from openai import OpenAI
 openai_api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=openai_api_key)
 from langchain_community.chat_models import ChatOpenAI
-import json
-from pathlib import Path
-from langchain.agents import create_json_agent
-# from langchain_community.agent_toolkits import JsonToolkit
-from langchain_community.tools.json.tool import JsonSpec
-from langchain_community.agent_toolkits.json.toolkit import JsonToolkit
-from langchain_community.chat_models import ChatOpenAI
 from langchain_community.embeddings import OpenAIEmbeddings
 
-from langchain_community.document_loaders import JSONLoader, WebBaseLoader
+from langchain_community.document_loaders import JSONLoader
 from langchain_community.vectorstores import Chroma
 
-from langchain.memory import ConversationBufferMemory
-from langchain.memory import ChatMessageHistory
-
-import bs4
 from langchain.chains import create_history_aware_retriever, create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 
 from langchain_community.chat_message_histories import ChatMessageHistory
-from langchain_community.document_loaders import WebBaseLoader
 from langchain_core.chat_history import BaseChatMessageHistory
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.runnables.history import RunnableWithMessageHistory
@@ -43,12 +26,17 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 store = {}
 
+
 @app.route('/getTrips')
 def getTrips():
+    print("INSIDE")
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=1)
     query = request.json.get('query')
+    print("INSIDE1")
     session = request.json.get('session_id')
+    print("INSIDE2")
     customer_data = request.json.get('customer_data')
+    print("INSIDE3")
     ### Construct retriever ###
     loader = JSONLoader(file_path="./experiencesFull.json", jq_schema=".trips[]", text_content=False)
     docs = loader.load()
@@ -60,8 +48,8 @@ def getTrips():
 
     ### Contextualize question ###
     contextualize_q_system_prompt = """Given a chat history and the latest user question \
-    which might reference context in the chat history. .Return your response in Parsable JSON format
-    json field will be 'Response' And 'TRIP_ID' """
+    which might reference context in the chat history. 
+ """
     contextualize_q_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", contextualize_q_system_prompt),
@@ -126,7 +114,12 @@ def getTrips():
     Also write down some hypothesis data from the customer_data which helped you to suggest this trip. \
     2) the '_id's of the suggested trips. \
     
-    
+    Return your Final response as a  RFC8259 compliant JSON response  following this format without deviation.
+{
+
+ "Suggestions":"Your Final Answer"
+ 
+ }
     {context} {customer_data}"""
     qa_prompt = ChatPromptTemplate.from_messages(
         [
@@ -162,3 +155,8 @@ def getTrips():
     )["answer"]
 
     return var
+
+
+@app.route('/hello')
+def hello():
+    return "hee"
