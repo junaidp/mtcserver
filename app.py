@@ -28,16 +28,13 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 store = {}
 
 
-@app.route('/getTrips')
+@app.route('/getTrips', methods=['POST'])
 def getTrips():
     print("INSIDE")
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=1)
     query = request.json.get('query')
-    print("INSIDE1")
     session = request.json.get('session_id')
-    print("INSIDE2")
     customer_data = request.json.get('customer_data')
-    print("INSIDE3")
     ### Construct retriever ###
     loader = JSONLoader(file_path="./experiencesFull.json", jq_schema=".trips[]", text_content=False)
     docs = loader.load()
@@ -115,12 +112,7 @@ def getTrips():
     Also write down some hypothesis data from the customer_data which helped you to suggest this trip. \
     2) the '_id's of the suggested trips. \
     
-    Return your Final response as a  RFC8259 compliant JSON response  following this format without deviation.
-{
 
- "Suggestions":"Your Final Answer"
- 
- }
     {context} {customer_data}"""
     qa_prompt = ChatPromptTemplate.from_messages(
         [
