@@ -31,6 +31,7 @@ store = {}
 def getTrips():
     print("INSIDE")
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=1)
+    print("INSIDE0")
     query = request.json.get('query')
     print("INSIDE1")
     session = request.json.get('session_id')
