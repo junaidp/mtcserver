@@ -43,12 +43,12 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 store = {}
 
-
-@app.route('/withHistory1')
-def withhistory1():
-    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+@app.route('/getTrips')
+def getTrips():
+    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=1)
     query = request.json.get('query')
     session = request.json.get('session_id')
+    customer_data = request.json.get('customer_data')
     ### Construct retriever ###
     loader = JSONLoader(file_path="./experiencesFull.json", jq_schema=".trips[]", text_content=False)
     docs = loader.load()
@@ -60,7 +60,8 @@ def withhistory1():
 
     ### Contextualize question ###
     contextualize_q_system_prompt = """Given a chat history and the latest user question \
-    which might reference context in the chat history. Return your response in Parsable JSON format"""
+    which might reference context in the chat history. .Return your response in Parsable JSON format
+    json field will be 'Response' And 'TRIP_ID' """
     contextualize_q_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", contextualize_q_system_prompt),
@@ -73,18 +74,60 @@ def withhistory1():
     )
 
     ### Answer question ###
-    qa_system_prompt = """You are an assistant for question-answering tasks. \
-    Use the following pieces of retrieved context to answer the question. \
-    If you don't know the answer, just say that you don't know. \
-    You are an expert Travel agent and your task is to get the Customer requirements and then based on those. \
-    requirements and wishes, Suggest some trips from the {context}, Before Suggesting trips, Ask in total 3 questions 
-    One By One to user, Means Ask a question and then wait for their answer and so on ,\
-    and after you get the answer for the 3rd question , Suggest user, the best suitable trips as per their wishes from \
-    {context}, In your response only send 2 Json fields about the trip . 1) A 2 line overview about the trips and how they \
-    best fits with the customer. \
-    2) the '_id's of the suggested trips. Do not send any other information from that trip other than the 2 mentioned. \
-
-    {context}"""
+    qa_system_prompt = """You are an expert Travel agent and your task is to understand the Customer and their \
+    requirements  by 2 Ways :\
+    1) The customer data provided in customer_data  i.e Customer's sex, Age, passions , \
+    main Interests, lifestyles, type of travel, travel span, travelBucketList Of the Customer and Also their Dependents\
+    Considering the customer's Profession, Age , Family, upcoming Birthday and other provided information \
+    Do below Hypothesis on customers and their dependents and consider these factors when suggesting a trip: \
+            1. Age gap between the youngest and oldest person \
+            2. Closest combinations of birthday milestones among all persons \
+            3. Suggest combined celebration experience for close birthdays among persons \
+                consider physical limitation based on age and their lifestyle preferences  \
+            4. Use each person's age to infer their current life milestones (e.g., school, university, retirement). \
+            5. Upcoming milestone for each person" \
+            6. Infer the timeframe to the next supposed life milestone in months and years. \
+            7. Find out where each person works If this information could be found out from their email Domain , \
+                also try to find the domain on internet. \
+            9. evaluate if a person is a frequent traveler and what could be the nature of their travel and \
+                city/country on the basis of any loyalty programs they Might have and nature of their job \
+            10.Determine the Grades/Classes of each child on the basis of their age and the city and  country they \
+                living in. \
+            11.To determine the most likely travel months/weeks for the family, we need to identify the children's \
+                school holidays based on their grades/classes and the country/city they live in. \
+                This information can be obtained from the school calendar. \
+             
+    2) The customer Query/questions. \
+    
+    Do Not Ask Question which Answers can be found from customer chat or customer_data or the from above hypothesis
+    e.g Customer age , Age, name of \
+    their dependents and any other information provided in customer_data \
+    Before providing the final answer,You must greet the user with their name 
+    and with that you will ask the user 3 clarifying questions one by one In a very polite and welcoming tone
+    to gather more information. \
+    Your first clarifying question to the user:\
+    Get further Information on the basis of their Query and try find more information on what kind of \
+    trip they want.\
+    Your Second clarifying question to the user: \
+    Get further Information on the basis of their Answer to the First clarifying Question \
+    and try find more information on what kind of trip they want. \
+    Your Third clarifying question to the user: \
+    Get further Information regarding user on the basis of their Answer to the Second clarifying Question \
+    and try to find more information on what kind of trip they want. \
+    With every question Give user some Examples of the Answer to that question  \
+    Final answer to the user's original question: \
+    Suggest user, the best suitable trips as per their query and customer_data \
+    
+    If there are more than one trip aligns with customer requirements , Suggest all of those trips .\
+    In your response only send 2 Json fields about the trip . \
+    1) A Three line overview about the trips and \
+    explain the customer in detail how the suggested trips best fits with the customer from their chat, customer_data 
+    and the hypothesis \
+    Also write down some hypothesis data from the customer_data which helped you to suggest this trip. \
+    2) the '_id's of the suggested trips. \
+    
+    
+    {context} {customer_data}"""
     qa_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", qa_system_prompt),
@@ -112,182 +155,10 @@ def withhistory1():
     )
 
     var = conversational_rag_chain.invoke(
-        {"input": query},
+        {"input": query, "customer_data": customer_data},
         config={
             "configurable": {"session_id": session}
         },  # constructs a key "abc123" in `store`.
     )["answer"]
 
     return var
-
-
-@app.route('/withHistory')
-def withhistory():
-    embedding_function = OpenAIEmbeddings()
-
-    loader = JSONLoader(file_path="./experiencesFull.json", jq_schema=".trips[]", text_content=False)
-    documents = loader.load()
-
-    db = Chroma.from_documents(documents, embedding_function)
-    retriever = db.as_retriever()
-
-    print("RETRIEVER")
-    print(retriever)
-
-    query = request.json.get('query')
-    session_id = request.json.get('session_id')
-    model = ChatOpenAI()
-
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            (
-                "system",
-                """Answer the question based only on the following context:
-    {context}."""
-
-            ),
-            MessagesPlaceholder(variable_name="history"),
-            ("human", "{input}"),
-        ]
-    )
-    runnable = prompt | model | StrOutputParser()
-
-    def get_session_history(session_id: str) -> BaseChatMessageHistory:
-        if session_id not in store:
-            store[session_id] = ChatMessageHistory()
-        return store[session_id]
-
-    with_message_history = RunnableWithMessageHistory(
-        runnable,
-        get_session_history,
-        input_messages_key="input",
-        history_messages_key="history",
-    )
-
-    response = with_message_history.invoke(
-        {"context": retriever, "input": query, "question": RunnablePassthrough()},
-        config={"configurable": {"session_id": session_id}},
-    )
-
-    return str(response)
-
-
-@app.route('/withouthistory')
-def hello1():
-    query = request.json.get('query')
-    chat_history = str(request.json.get('previousChat'))
-    embedding_function = OpenAIEmbeddings()
-
-    loader = JSONLoader(file_path="./experiencesFull.json", jq_schema=".trips[]", text_content=False)
-    documents = loader.load()
-
-    db = Chroma.from_documents(documents, embedding_function)
-    retriever = db.as_retriever()
-    print("RETRIEVER")
-    print(retriever)
-
-    template = """Answer the question based only on the following context:
-    {context}. You are an expert Travel agent and your task is to get the Customer requirements and then based on those 
-    requirements and wishes, Suggest a trip from the {context}, Before Suggesting trips Ask in total 3 questions One 
-    By One to user, Means Ask a question and then wait for their answer and so on ,
-    and after you get the answer for the 3rd question , Suggest user the best suitable trip as per their wishes from 
-    {context} and keep in mind the chat history 
-
-    Question: {question}
-    """
-    prompt = ChatPromptTemplate.from_template(template)
-
-    model = ChatOpenAI()
-    memory = ConversationBufferMemory()
-    chain = (
-            {"context": retriever, "question": RunnablePassthrough()}
-            | prompt
-            | model
-            | StrOutputParser()
-    )
-
-    response = chain.invoke(chat_history + query)
-    # history = ChatMessageHistory()
-    # history.add_user_message(query)
-    # history.add_ai_message(response)
-    # print(history)
-    return response
-
-
-@app.route('/hello')
-def hello():
-    # with open("experiencesSample.json") as f:
-    #    data = yaml.load(f, Loader=yaml.FullLoader)
-    # json_spec = JsonSpec(dict_=data, max_value_length=4000)
-    # json_toolkit = JsonToolkit(spec=json_spec)
-
-    # json_agent_executor = create_json_agent(
-    #   llm=BaseLanguageModel(temperature=0), toolkit=json_toolkit, verbose=True
-    # )
-    # print(json_agent_executor.run("which is the most expensive experience"))
-
-    file_path = 'experiencesFull.json'
-    data = json.loads(Path(file_path).read_text())
-
-    spec = JsonSpec(dict_=data, max_value_length=4000)
-    toolkit = JsonToolkit(spec=spec)
-    agent = create_json_agent(llm=ChatOpenAI(temperature=1, model="gpt-3.5-turbo"), toolkit=toolkit,
-                              max_iterations=1000,
-                              verbose=True)
-    print(agent.run("Go through all the trips in the file ,and Only return the '_id' "
-                    "of the all the trips"))
-    return "d"
-
-
-@app.route('/qa')
-def qa():
-    query = request.json.get('query')
-    customer = request.json.get('customer')
-    previous = request.json.get('previous')
-    prompt = prompts(query, customer, previous)
-    response = model(prompt)
-    return response
-
-
-def prompts(customer_query, customer_data, previous_chat):
-    prompt = f"""
-    don't ask already answered questions, also dont ask any question
-    for which the answer could also be found
-    in 'customer_data', Always keep in mind the 'previousChat' before asking a question or suggesting the trip 
-here is user {customer_query}
-here is the customer file {customer_data}
-here is the user previous chat data {previous_chat}
-
-
-    """
-    return prompt
-
-
-def model(prompt):
-    file_path = 'experiencesSample.json'
-    data = json.loads(Path(file_path).read_text())
-
-    messages = [
-        {"role": "system", "content": f"""
-
-  you are an helpful ,experienced traveler chatbot ,
-  based on the user query ask Question to the user following their query, Once you get the answer of that question, 
-  Ask another question to further narrow down the requirements,
-  After you get the answer for the second question, Ask a last question.
-  Make sure you do not Ask for the information which you already have from previous user's answers or in 'customer_data'
-
-  and should recommend trips as per their interests given in the {data} data follow the instructions and provide relevant  
-  experiences id, id`s separated by comma without any descriptive text
-  """},
-        {'role': 'user', 'content': prompt}]
-
-    response = client.chat.completions.create(
-        model="gpt-3.5-turbo",
-        messages=messages,
-        temperature=1,
-        max_tokens=256,
-        top_p=1,
-        frequency_penalty=0,
-        presence_penalty=0
-    )
-    return str(response.choices[0].message.content)
