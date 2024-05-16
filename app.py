@@ -8,7 +8,8 @@ from openai import OpenAI
 
 openai_api_key = os.getenv("OPENAI_API_KEY")
 client = OpenAI(api_key=openai_api_key)
-from  langchain_openai import ChatOpenAI
+from langchain_openai.chat_models import ChatOpenAI
+
 from langchain_community.embeddings import OpenAIEmbeddings
 
 from langchain_community.document_loaders import JSONLoader
@@ -31,7 +32,6 @@ store = {}
 def getTrips():
     print("INSIDE")
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=1)
-    print("INSIDE0")
     query = request.json.get('query')
     print("INSIDE1")
     session = request.json.get('session_id')
