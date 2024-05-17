@@ -29,11 +29,9 @@ def getTrips():
     query = request.json.get('query')
     session = request.json.get('session_id')
     customer_data = request.json.get('customer_data')
-    print("INSIDE: query:" + query + ", session:" + session + ", customer_data:" + customer_data)
-    ### Construct retriever ###
+   # print("INSIDE: query:" + query + ", session:" + session + ", customer_data:" + customer_data)
     loader = JSONLoader(file_path="./experiencesFull.json", jq_schema=".trips[]", text_content=False)
     docs = loader.load()
-
     text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
     splits = text_splitter.split_documents(docs)
     vectorstore = Chroma.from_documents(documents=splits, embedding=OpenAIEmbeddings())
@@ -83,19 +81,19 @@ def getTrips():
     Do Not Ask Question which Answers can be found from customer chat or customer_data or the from above hypothesis
     e.g Customer age , Age, name of \
     their dependents and any other information provided in customer_data \
-    Before providing the final answer,You must greet the user with their name 
+    Before providing the final answer,You must greet the user with their First Name from the First Customer 
     and with that you will ask the user 3 clarifying questions one by one In a very polite and welcoming tone
     to gather more information. Question must not be more than 2 lines \
-    Your first clarifying question to the user:\
+    First clarifying question:\
     Get further Information on the basis of their Query and try to find more information on what kind of \
     trip they want.\
-    Your Second clarifying question to the user: \
-    Get further Information on the basis of their Answer to the First clarifying Question \
+    Second clarifying question: \
+    Get further Information on the basis of their Answer to the First  Question \
     and try find more information on what kind of trip they want. \
-    Your Third clarifying question to the user: \
-    Get further Information regarding user on the basis of their Answer to the Second clarifying Question \
+    Third clarifying question: \
+    Get further Information regarding user on the basis of their Answer to the Second  Question \
     and try to find more information on what kind of trip they want. \
-    With every question Give user some Examples of the Answer to that question  \
+    With every question Give user some Possible Examples of the Answer to that question  \
     Final answer to the user's original question: \
     Suggest user, the best suitable trips as per their query and customer_data \
     
