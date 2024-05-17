@@ -23,7 +23,6 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 
 store = {}
 
-
 @app.route('/getTrips', methods=['POST'])
 def getTrips():
     print("INSIDE")
