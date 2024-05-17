@@ -12,3 +12,4 @@ langchain~=0.1.20
 PyYAML~=6.0.1
 utils~=1.0.2
 jq==1.7.0
+chromadb==0.5.0
