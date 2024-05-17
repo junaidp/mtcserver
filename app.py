@@ -81,8 +81,9 @@ def getTrips():
     e.g Customer age , Age, name of \
     their dependents and any other information provided in customer_data \
     Before providing the final answer,You must greet the user with their First Name from the First Customer 
-    and with that you will ask the user 3 clarifying questions one by one In a very polite and welcoming tone
-    to gather more information. Question must not be more than 2 lines \
+    and with that you will ask the user 3 clarifying questions One By one In a very polite and welcoming tone
+    to gather more information. Question must not be more than 2 lines, Wait for the answer And then Then Ask the other\
+     question , SO JUST 1 Question at a time Please\
     First clarifying question:\
     Get further Information on the basis of their Query and try to find more information on what kind of \
     trip they want.\
