@@ -37,7 +37,6 @@ def getTrips():
     vectorstore = Chroma.from_documents(documents=splits, embedding=OpenAIEmbeddings())
     retriever = vectorstore.as_retriever()
 
-    ### Contextualize question ###
     contextualize_q_system_prompt = """Given a chat history and the latest user question \
     which might reference context in the chat history. 
  """
