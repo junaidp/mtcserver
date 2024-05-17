@@ -28,7 +28,7 @@ def getTrips():
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=1)
     query = request.json.get('query')
     session = request.json.get('session_id')
-    customer_data = request.json.get('customer_data')+""
+    customer_data = request.json.get('customer_data')
     print("INSIDE: query:" + query + ", session:" + session + ", customer_data:" + customer_data)
     ### Construct retriever ###
     loader = JSONLoader(file_path="./experiencesFull.json", jq_schema=".trips[]", text_content=False)
@@ -85,9 +85,9 @@ def getTrips():
     their dependents and any other information provided in customer_data \
     Before providing the final answer,You must greet the user with their name 
     and with that you will ask the user 3 clarifying questions one by one In a very polite and welcoming tone
-    to gather more information. \
+    to gather more information. Question must not be more than 2 lines \
     Your first clarifying question to the user:\
-    Get further Information on the basis of their Query and try find more information on what kind of \
+    Get further Information on the basis of their Query and try to find more information on what kind of \
     trip they want.\
     Your Second clarifying question to the user: \
     Get further Information on the basis of their Answer to the First clarifying Question \
