@@ -28,7 +28,7 @@ def getTrips():
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=1)
     query = request.json.get('query')
     session = request.json.get('session_id')
-    customer_data = request.json.get('customer_data')
+    customer_data = ', '.join(request.json.get('customer_data'))
     print("INSIDE: queyy:" +query +", session:"+ session +", customer_data:" + customer_data)
     ### Construct retriever ###
     loader = JSONLoader(file_path="./experiencesFull.json", jq_schema=".trips[]", text_content=False)
