@@ -1,2 +1,2 @@
-web: ./install_jq.sh gunicorn app:app
+web: gunicorn app:app
 server = app.server
