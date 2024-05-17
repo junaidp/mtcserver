@@ -138,7 +138,7 @@ def getTrips():
         {"input": query, "customer_data": customer_data},
         config={
             "configurable": {"session_id": session}
-        },  # constructs a key "abc123" in `store`.
+        },  
     )["answer"]
 
     return var
