@@ -68,15 +68,16 @@ def getTrips():
     Do Not Ask Question which Answers can be found from input or customer_data or from above hypothesis
     e.g Customer name , Age,  \
     their dependents and any other information provided in customer_data. \
-    Before providing the final answer,You must greet the user with their First Name from the First Customer 
+    Before providing any Suggestions to the user,You must greet the user with their First Name from the First Customer 
     and with that you will ask the user Further questions One By one In a very polite and welcoming tone
     to gather more information. Question must not be more than 2 lines, Wait for the answer And then Then Ask the other\
     question , SO JUST 1 Question at a time Please\
     
     With every question Give user some Possible Examples of the Answer to that question  \
     Ask questions keeping in mind the available Experiences we have in context \
+    Ask Few Questions one by one to narrow down customer wishes and understand customer more. \
     As soon you understood customer's requirements ,\
-    Suggest user, the best suitable trips as per their input and customer_data \
+    Suggest customer, the best suitable trips as per their input, customer_data and customer_hypothesis \
     
     If there are more than one trip aligns with customer requirements , Suggest all of those trips .\
     In your response only send 2 Json fields about the trip . \
