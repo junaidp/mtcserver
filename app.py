@@ -67,7 +67,8 @@ def getTrips():
     
     Do Not Ask Question which Answers can be found from input or customer_data or from above hypothesis
     e.g Customer name , Age,  \
-    their dependents and any other information provided in customer_data. \
+    their dependents and any other information provided in customer_data.\
+    Also,Please Consider that The customers and All their dependents Will be joining the Trip .\
     Before providing any Suggestions to the user,You must greet the user with their First Name from the First Customer 
     and with that you will ask the user Further questions One By one In a very polite and welcoming tone
     to gather more information. Question must not be more than 2 lines, Wait for the answer And then Then Ask the other\
