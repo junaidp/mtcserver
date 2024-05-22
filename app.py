@@ -113,7 +113,7 @@ def getTrips():
     )
 
     var = conversational_rag_chain.invoke(
-        {"input": query, "customer_data": customer_data},
+        {"input": query, "customer_data": customer_data, "customer_hypothesis": customer_hypothesis},
         config={
             "configurable": {"session_id": session}
         },
