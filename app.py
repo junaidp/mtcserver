@@ -6,9 +6,11 @@ from flask import request
 app = Flask(__name__)
 from openai import OpenAI
 
-openai_api_key = os.getenv("OPENAI_API_KEY")
-client = OpenAI(api_key=openai_api_key)
-from langchain_community.chat_models import ChatOpenAI
+#openai_api_key = os.getenv("OPENAI_API_KEY")
+#client = OpenAI(api_key=openai_api_key)
+anthropic_api_key = os.getenv("ANTHROPIC_API_KEY")
+client = OpenAI(api_key=anthropic_api_key)
+from langchain_community.chat_models import ChatOpenAI, ChatAnthropic
 from langchain_community.embeddings import OpenAIEmbeddings
 from langchain_community.document_loaders import JSONLoader
 from langchain_community.vectorstores import Chroma
@@ -25,10 +27,12 @@ store = {}
 
 @app.route('/getTrips', methods=['POST'])
 def getTrips():
-    llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=1)
+ #   llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=1)
+    llm = ChatAnthropic(model="claude-2.1", temperature=1)
     query = request.json.get('query')
     session = request.json.get('session_id')
     customer_data = request.json.get('customer_data')
+    customer_hypothesis = request.json.get('customer_hypothesis')
    # print("INSIDE: query:" + query + ", session:" + session + ", customer_data:" + customer_data)
     loader = JSONLoader(file_path="./experiencesFull.json", jq_schema=".trips[]", text_content=False)
     docs = loader.load()
@@ -57,56 +61,31 @@ def getTrips():
     1) The customer data provided in customer_data  i.e Customer's sex, Age, passions , \
     main Interests, lifestyles, type of travel, travel span, travelBucketList Of the Customer and Also their Dependents\
     Considering the customer's Profession, Age , Family, upcoming Birthday and other provided information \
-    Do below Hypothesis on customers and their dependents and consider these factors when suggesting a trip: \
-            1. Age gap between the youngest and oldest person \
-            2. Closest combinations of birthday milestones among all persons \
-            3. Suggest combined celebration experience for close birthdays among persons \
-                consider physical limitation based on age and their lifestyle preferences  \
-            4. Use each person's age to infer their current life milestones (e.g., school, university, retirement). \
-            5. Upcoming milestone for each person" \
-            6. Infer the timeframe to the next supposed life milestone in months and years. \
-            7. Find out where each person works If this information could be found out from their email Domain , \
-                also try to find the domain on internet. \
-            9. evaluate if a person is a frequent traveler and what could be the nature of their travel and \
-                city/country on the basis of any loyalty programs they Might have and nature of their job \
-            10.Determine the Grades/Classes of each child on the basis of their age and the city and  country they \
-                living in. \
-            11.To determine the most likely travel months/weeks for the family, we need to identify the children's \
-                school holidays based on their grades/classes and the country/city they live in. \
-                This information can be obtained from the school calendar. \
+    Go through customer_hypothesis on customers and their dependents and consider them when suggesting a trip: \         
              
     2) The customer Query/questions. \
     
-    Do Not Ask Question which Answers can be found from customer chat or customer_data or the from above hypothesis
-    e.g Customer age , Age, name of \
-    their dependents and any other information provided in customer_data \
+    Do Not Ask Question which Answers can be found from query or customer_data or from above hypothesis
+    e.g Customer name , Age,  \
+    their dependents and any other information provided in customer_data. \
     Before providing the final answer,You must greet the user with their First Name from the First Customer 
-    and with that you will ask the user 3 clarifying questions One By one In a very polite and welcoming tone
+    and with that you will ask the user Further questions One By one In a very polite and welcoming tone
     to gather more information. Question must not be more than 2 lines, Wait for the answer And then Then Ask the other\
-     question , SO JUST 1 Question at a time Please\
-    First clarifying question:\
-    Get further Information on the basis of their Query and try to find more information on what kind of \
-    trip they want.\
-    Second clarifying question: \
-    Get further Information on the basis of their Answer to the First  Question \
-    and try find more information on what kind of trip they want. \
-    Third clarifying question: \
-    Get further Information regarding user on the basis of their Answer to the Second  Question \
-    and try to find more information on what kind of trip they want. \
+    question , SO JUST 1 Question at a time Please\
+    
     With every question Give user some Possible Examples of the Answer to that question  \
-    Final answer to the user's original question: \
+    Ask questions keeping in mind the available Experiences we have in context \
+    As soon you understood customer's requirements ,\
     Suggest user, the best suitable trips as per their query and customer_data \
     
     If there are more than one trip aligns with customer requirements , Suggest all of those trips .\
     In your response only send 2 Json fields about the trip . \
     1) A Three line overview about the trips and \
     explain the customer in detail how the suggested trips best fits with the customer from their chat, customer_data 
-    and the hypothesis \
-    Also write down some hypothesis data from the customer_data which helped you to suggest this trip. \
+    and the customer_hypothesis \
     2) the '_id's of the suggested trips. \
-    
 
-    {context} {customer_data}"""
+    {query} {context} {customer_data} {customer_hypothesis}"""
     qa_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", qa_system_prompt),
