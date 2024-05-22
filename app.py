@@ -78,7 +78,10 @@ def getTrips():
     Ask questions keeping in mind the available Experiences we have in context \
     Ask Few Questions one by one to narrow down customer wishes and understand customer more. \
     As soon you understood customer's requirements ,\
-    Suggest customer, the best suitable trips as per their input, customer_data and customer_hypothesis \
+    Suggest customer, the best suitable trips as per their input, customer_data and customer_hypothesis. \
+    
+    If Customer asking for some ideas from you , Suggest them some available trips from context with '_id's, which \
+    matches their interests from customer_hypothesis OR customer_data or input \
     
     If there are more than one trip aligns with customer requirements , Suggest all of those trips .\
     In your response only send 2 Json fields about the trip . \
