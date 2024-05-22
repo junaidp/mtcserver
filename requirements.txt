@@ -14,3 +14,4 @@ utils~=1.0.2
 jq==1.7.0
 chromadb==0.5.0
 tiktoken==0.7.0
+langchain-anthropic==0.1.13
