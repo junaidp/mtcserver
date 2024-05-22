@@ -63,9 +63,9 @@ def getTrips():
     Considering the customer's Profession, Age , Family, upcoming Birthday and other provided information \
     Go through customer_hypothesis on customers and their dependents and consider them when suggesting a trip: \         
              
-    2) The customer Query/questions. \
+    2) The customer input / questions. \
     
-    Do Not Ask Question which Answers can be found from query or customer_data or from above hypothesis
+    Do Not Ask Question which Answers can be found from input or customer_data or from above hypothesis
     e.g Customer name , Age,  \
     their dependents and any other information provided in customer_data. \
     Before providing the final answer,You must greet the user with their First Name from the First Customer 
@@ -76,7 +76,7 @@ def getTrips():
     With every question Give user some Possible Examples of the Answer to that question  \
     Ask questions keeping in mind the available Experiences we have in context \
     As soon you understood customer's requirements ,\
-    Suggest user, the best suitable trips as per their query and customer_data \
+    Suggest user, the best suitable trips as per their input and customer_data \
     
     If there are more than one trip aligns with customer requirements , Suggest all of those trips .\
     In your response only send 2 Json fields about the trip . \
@@ -85,7 +85,7 @@ def getTrips():
     and the customer_hypothesis \
     2) the '_id's of the suggested trips. \
 
-    {query} {context} {customer_data} {customer_hypothesis}"""
+    {input} {context} {customer_data} {customer_hypothesis}"""
     qa_prompt = ChatPromptTemplate.from_messages(
         [
             ("system", qa_system_prompt),
