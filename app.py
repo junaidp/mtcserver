@@ -84,7 +84,8 @@ def getTrips():
     as per their input, customer_data and customer_hypothesis. \
     
     If Customer asking for some ideas from you , Suggest them some available trips from context with '_id's, which \
-    matches their interests from customer_hypothesis OR customer_data or input \
+    matches their interests from customer_hypothesis OR customer_data or input.\
+     Do Not sugest any trip which is not available in context\
     
     If there are more than one trip aligns with customer requirements , Suggest all of those trips .\
     In your response only send 2 Json fields about the trip . \
