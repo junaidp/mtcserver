@@ -1,6 +1,6 @@
 {
  "trips": [
-{
+{"attributes": {
     "_id" : "65ff0e60e1b82f7ea737f8e5",
     "title" : "Private Visit of the Small Apartments.",
     "vendorId" : "65ff02c2e1b82f7ea737f8e3",
@@ -84,9 +84,9 @@
         "French Revolution",
         "Royal Palace",
         "Secret Rooms"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "65ff3cfd8302531638e39728",
     "title" : "Private Diner in the Palace",
     "vendorId" : "65ff02c2e1b82f7ea737f8e3",
@@ -134,9 +134,9 @@
         "Gastronomy",
         "Private Diner",
         "Exceptional Dining Experience"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "66000cff3b3a2d7cf3c2c333",
     "title" : "Private Visit to the Trianon Estate",
     "vendorId" : "65ff02c2e1b82f7ea737f8e3",
@@ -179,9 +179,9 @@
         "Grand Trianon",
         "Petit Trianon",
         "Queen's Theatre"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "66000f783b3a2d7cf3c2c334",
     "title" : "VIP Visit of the Palace's Gardens",
     "vendorId" : "65ff02c2e1b82f7ea737f8e3",
@@ -210,9 +210,9 @@
         "Versailles",
         "Royal Palace",
         "André Le Nôtre"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "660010ed3b3a2d7cf3c2c335",
     "title" : "Private Visit of the Sculptures and Mouldings Gallery",
     "vendorId" : "65ff02c2e1b82f7ea737f8e3",
@@ -248,9 +248,9 @@
         "Ancient Greece",
         "Ancient Rome",
         "Louvre Museum"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "6600122a3b3a2d7cf3c2c336",
     "title" : "The Gallery of Coaches",
     "vendorId" : "65ff02c2e1b82f7ea737f8e3",
@@ -282,9 +282,9 @@
         "Louis XIV",
         "Hardouin-Mansart",
         "Louis-Philippe"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "660014913b3a2d7cf3c2c338",
     "title" : "Private Visit of the Academy",
     "vendorId" : "660013703b3a2d7cf3c2c337",
@@ -313,9 +313,9 @@
         "Versailles",
         "Equestrian Academy",
         "Horse Riding"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "660016353b3a2d7cf3c2c339",
     "title" : "Attend a Dressage Training",
     "vendorId" : "660013703b3a2d7cf3c2c337",
@@ -350,9 +350,9 @@
         "Lusitano",
         "Dressage",
         "Horse Training"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "660017dc3b3a2d7cf3c2c33a",
     "title" : "Riding Lesson at the Academy",
     "vendorId" : "660013703b3a2d7cf3c2c337",
@@ -387,9 +387,9 @@
         "Lusitano",
         "Riding Horse",
         "Private Lesson"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "660020003b3a2d7cf3c2c33f",
     "title" : "The Congress Chamber",
     "vendorId" : "65ff02c2e1b82f7ea737f8e3",
@@ -424,9 +424,9 @@
         "French Parliament",
         "French Constitution",
         "French President"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "660027013b3a2d7cf3c2c341",
     "title" : "Private visit of the Palais Garnier",
     "vendorId" : "660022683b3a2d7cf3c2c340",
@@ -457,9 +457,9 @@
         "Charles Garnier",
         "Opera House",
         "Backstage Visit"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "660028e23b3a2d7cf3c2c342",
     "title" : "Private Visit of the Opera Bastille",
     "vendorId" : "660022683b3a2d7cf3c2c340",
@@ -489,9 +489,9 @@
         "Backstage Visit",
         "Costumes workshops",
         "Set design workshops"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "66002c1b3b3a2d7cf3c2c343",
     "title" : "Ballet's Costumes workshop - Palais Garnier",
     "vendorId" : "660022683b3a2d7cf3c2c340",
@@ -529,9 +529,9 @@
         "Palais Garnier",
         "Paris Ballet",
         "Exclusive visit"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "66002ec23b3a2d7cf3c2c344",
     "title" : "Bastille's Set Design Workshops (Carpentry, Sculpture, Composite Materials and more)",
     "vendorId" : "660022683b3a2d7cf3c2c340",
@@ -571,9 +571,9 @@
         "Composite Materials",
         "Tapestry",
         "Painting"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "66017ee058cd005ba7eb4783",
     "title" : "Private Visit of the Great Apartments",
     "vendorId" : "66017d7c58cd005ba7eb4782",
@@ -609,9 +609,9 @@
         "Louis XIV",
         "Napoleon",
         "Catherine de Medici"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "660180ba58cd005ba7eb4784",
     "title" : "Private Visit of the Small Apartments",
     "vendorId" : "66017d7c58cd005ba7eb4782",
@@ -660,9 +660,9 @@
         "Intimate apartments",
         "Exclusive visit",
         "Not Accessible to the General Public"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "660182e458cd005ba7eb4785",
     "title" : "Private Diner in the Palace",
     "vendorId" : "66017d7c58cd005ba7eb4782",
@@ -709,9 +709,9 @@
         "Louis XIV",
         "Francis I",
         "UNESCO World Heritage"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "66018a2158cd005ba7eb4786",
     "title" : "Napoleon in Fontainebleau",
     "vendorId" : "66017d7c58cd005ba7eb4782",
@@ -754,9 +754,9 @@
         "Pope Pius VII",
         "Napoleon Coronation",
         "Napoleon Abdication"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "66018bb258cd005ba7eb4787",
     "title" : "Play Real Tennis in Fontainebleau (Jeu de Paume)",
     "vendorId" : "66017d7c58cd005ba7eb4782",
@@ -786,11 +786,9 @@
     "termsAndConditions" : "<p>Bookings minimum 2 weeks in advance</p>",
     "storyLineKeywords" : [
 
-    ],
-    "_class" : "com.mtc.dataentry.model.Experience"
-
+    ]}
 },
-{
+{"attributes": {
     "_id" : "66018f1458cd005ba7eb4789",
     "title" : "Private Hot Air Balloon in Paris and Fontainebleau",
     "vendorId" : "66018cdc58cd005ba7eb4788",
@@ -828,9 +826,9 @@
         "Hot Air Balloon",
         "Paris",
         "Castles"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "66095ad16f27e110abe65e0a",
     "title" : "The Giacometti Notebooks",
     "vendorId" : "66095a516f27e110abe65e09",
@@ -864,11 +862,9 @@
         "Sculpture",
         "Notebooks",
         "Drawing Notebooks"
-    ],
-    "_class" : "com.mtc.dataentry.model.Experience"
-
+    ]}
 },
-{
+{"attributes": {
     "_id" : "660e92c83d5b54074f9aaa2f",
     "title" : "Private Visit of the Small Apartments.",
     "vendorId" : "65ff02c2e1b82f7ea737f8e3",
@@ -952,9 +948,9 @@
         "French Revolution",
         "Royal Palace",
         "Secret Rooms"
-    ]
+    ]}
 },
-{
+{"attributes": {
     "_id" : "66164d43d29b6f258ba3d202",
     "title" : "The Declaration of the Rights of Man and of the Citizen",
     "vendorId" : "66017c8558cd005ba7eb4781",
@@ -993,10 +989,10 @@
         "Thomas Jefferson",
         "Historical Document"
     ],
-    "memberShip" : "platinum"
+    "memberShip" : "platinum"}
 
 },
-{
+{"attributes": {
     "_id" : "66164d4bd29b6f258ba3d203",
     "title" : "Marie Antoinette's Trial",
     "vendorId" : "66017c8558cd005ba7eb4781",
@@ -1038,10 +1034,10 @@
         "Louis XVI",
         "Historic Trial"
     ],
-    "memberShip" : "gold"
+    "memberShip" : "gold"}
 
 },
-{
+{"attributes": {
     "_id" : "66164f1fd29b6f258ba3d204",
     "title" : "Trials of the Knights Templar",
     "vendorId" : "66017c8558cd005ba7eb4781",
@@ -1079,10 +1075,10 @@
         "Medieval History",
         "Templar's Treasure"
     ],
-    "memberShip" : "gold"
+    "memberShip" : "gold"}
 
 },
-{
+{"attributes": {
     "_id" : "66165ec7d29b6f258ba3d207",
     "title" : "The Prisse Papyrus",
     "vendorId" : "66165bf5d29b6f258ba3d206",
@@ -1113,39 +1109,34 @@
         "Ancient Egypt",
         "Historical Treasure"
     ],
-    "memberShip" : "silver"
+    "memberShip" : "silver"}
 },
-{
-    "_id" : "661660d7d29b6f258ba3d208",
-    "title" : "The Dead Sea Scrolls",
-    "vendorId" : "66165bf5d29b6f258ba3d206",
-    "providers" : [
-
+{"attributes": {
+    "_id": "661660d7d29b6f258ba3d208",
+    "title": "The Dead Sea Scrolls",
+    "vendorId": "66165bf5d29b6f258ba3d206",
+    "providers": [
     ],
-    "description" : "<p>This discovery, which was considered to be the most important archaeological find in the 20th century, continues to question the foundations of Judaism and Christianity, which are now more than ever conjoined by this mysterious library, buried in the desert.</p><p>During this experience, you will get the rare chance to see the Death Sea Scrolls and other related precious manuscripts in the company of the head the Department of Oriental Manuscripts.</p>",
-    "address" : "",
-    "price" : [
+    "description": "<p>This discovery, which was considered to be the most important archaeological find in the 20th century, continues to question the foundations of Judaism and Christianity, which are now more than ever conjoined by this mysterious library, buried in the desert.</p><p>During this experience, you will get the rare chance to see the Death Sea Scrolls and other related precious manuscripts in the company of the head the Department of Oriental Manuscripts.</p>",
+    "address": "",
+    "price": [
         "€5000"
     ],
-    "duration" : [
-
+    "duration": [
     ],
-    "availableTime" : [
-
+    "availableTime": [
     ],
-    "links" : [
-
+    "links": [
     ],
-    "linkWithOtherExperience" : [
-
+    "linkWithOtherExperience": [
     ],
-    "termsAndConditions" : "<p><br></p>",
-    "storyLineKeywords" : [
+    "termsAndConditions": "<p><br></p>",
+    "storyLineKeywords": [
         "Dead Sea Scrolls",
         "Bible",
         "Judaism",
         "Christianity"
     ],
-    "memberShip" : ""
-
+    "memberShip": ""
+}
 }]}
