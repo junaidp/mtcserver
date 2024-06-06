@@ -229,7 +229,7 @@ def getTripsMongo():
     customer_hypothesis = request.json.get('customer_hypothesis')
     # print("INSIDE: query:" + query + ", session:" + session + ", customer_data:" + customer_data)
     loader = MongodbLoader(
-        connection_string="mongodb+srv://junaidp:sYfxGXcHFWnsuZPi@cluster0-wxkrw.mongodb.net/data-entry?retryWrites=true&w=majority",
+        connection_string="mongodb+srv://junaidp:@cluster0-wxkrw.mongodb.net/data-entry?retryWrites=true&w=majority",
         db_name="data-entry",
         collection_name="experience",
 #        filter_criteria={"borough": "Bronx", "cuisine": "Bakery"},
