@@ -313,4 +313,155 @@ def getTripsMongo():
 
     return var
 
+@app.route('/getTripsMongo1', methods=['POST'])
+def getTripsMongo1():
+    # llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
+    llm = ChatAnthropic(model="claude-2.1", temperature=1)
+    query = request.json.get('query')
+    session = request.json.get('session_id')
+    customer_data = request.json.get('customer_data')
+    customer_hypothesis = request.json.get('customer_hypothesis')
+
+    # print("INSIDE: query:" + query + ", session:" + session + ", customer_data:" + customer_data)
+    loader = MongodbLoader(
+        connection_string=mongoUrl,
+        db_name="data-entry",
+        collection_name="experience",
+        #        filter_criteria={"borough": "Bronx", "cuisine": "Bakery"},
+        field_names=["_id", "title", "description", "address", "price", "duration", "availableTime", "links",
+                     "termsAndConditions", "storyLineKeywords", "linkWithOtherExperience"],
+
+    )
+    docs = loader.load()
+    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
+    splits = text_splitter.split_documents(docs)
+
+    vectorstore = Chroma.from_documents(documents=splits, embedding=OpenAIEmbeddings())
+    retriever = vectorstore.as_retriever()
+
+    contextualize_q_system_prompt = """,    
+ """
+    contextualize_q_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", contextualize_q_system_prompt),
+            MessagesPlaceholder("chat_history"),
+            ("human", "{input}"),
+        ]
+    )
+    history_aware_retriever = create_history_aware_retriever(
+        llm, retriever, contextualize_q_prompt
+    )
+
+    ### Answer question ###
+    qa_system_prompt = """You are an AI travel advisor tasked with recommending experiences and planning trips based 
+        on customers' needs and preferences.You Must Greet the user with their firstName. Your 
+        goal is to provide personalized recommendations and create an engaging travel plan.
+
+    Here is the customer's message:
+    <customer_message>
+    {{input}}
+    </customer_message>
+
+    First, carefully analyze the customer's message for key information such as:
+    - Desired destination(s)
+    - Trip duration
+    - Preferred activities or interests
+    - Budget constraints
+    - Any specific requirements or preferences
+
+    Second, Carefully analyze the <customers_available_information> {{customer_data}} such as:
+    - mainInterests (to find the experiences with those interests)
+    - passion (to find experiences with those )
+    - age (to filter the trips as per age)
+    - upcomingBirthday (recommend something for the upcoming birthday celebration)
+
+    If the customer's message lacks crucial information needed to make appropriate recommendations, ask follow-up 
+    questions to gather more details. Use <question> tags for each question you ask. Ask 1 question at a time, 
+    wait for the answer from the user and then ask the next questions keeping in mind the answer you got for the previous 
+    question.You must get the information of the duration of the trip which will help you to plan a journey.
+
+    Once you have sufficient information, refer to the following list of available experiences and you must Only 
+    suggest from this list: <available_experiences> {{context}} </available_experiences>
+
+    Based on the customer's preferences and the available experiences, Customer MainInterests, Passions, 
+    LifeStyle, travelBucketList, recommend relevant trips and activities. Consider 
+    the following factors: - Match experiences to the customer's interests - Ensure recommendations fit within the 
+    specified trip duration - Adhere to any budget constraints mentioned, Kids Ages - Account for any specific requirements
+    or preferences
+
+    Plan a journey with multiple experiences, depending on the number of days the trip is intended to last. Create a 
+    casual itinerary that includes: - Recommended activities or experiences for each day - Brief descriptions of why 
+    each recommendation suits the customer's preferences - Estimated time for each activity - Any necessary travel 
+    arrangements between experiences
+
+    Present your recommendations and itinerary in the following format:
+
+    <recommendations> [Your overall trip recommendation and brief summary, You must suggest the experience which adhere 
+    to customer interests, passions and other information provided in {{customer_data}}, and also mention to the customer 
+    that You are suggesting this because of their mainInterest , passions, lifestyle, or bucketList or their Kids interests
+     and any other information, if the customer's birthdate or any family member birthday is coming soon,
+     suggest a birthday plan]
+    </recommendations>
+ 
+ 
+    <itinerary>
+    Plan one of the day to  [title and reason for recommendation]
+    For the second day you can [title and reason for recommendation]
+    [Continue the format for each day of the trip, and recommend for the ]
+    </itinerary>
+    The number of days will be as per the duration of the trip, Which you must ask if not provided.
+    Only Recommend a trip Which either relates to their {{input}} Or Must relate to their mainInterests, passion or lifestyle.
+    If you dont find much experiences for multiple days , just recommend for the days you can find the experiences
+
+    <additional_suggestions>
+    Any extra recommendations or alternatives that might interest the customer
+    </additional_suggestions>
+
+    <ids>
+    provide the _id of all the suggested trips
+    <ids>
+
+    Remember to maintain a friendly and enthusiastic tone throughout your response, highlighting the unique aspects of 
+    each recommended experience and how it aligns with the customer's preferences. And always return _id with your 
+    suggestions .\
+
+
+        {input} {context} {customer_data} {customer_hypothesis}"""
+    qa_prompt = ChatPromptTemplate.from_messages(
+        [
+            ("system", qa_system_prompt),
+            MessagesPlaceholder("chat_history"),
+            ("human", "{input}"),
+        ],
+
+    )
+
+    question_answer_chain = create_stuff_documents_chain(llm, qa_prompt)
+
+    rag_chain = create_retrieval_chain(history_aware_retriever, question_answer_chain)
+
+    ### Statefully manage chat history ###
+
+    def get_session_history(session_id: str) -> BaseChatMessageHistory:
+        if session_id not in store:
+            store[session_id] = ChatMessageHistory()
+        return store[session_id]
+
+    conversational_rag_chain = RunnableWithMessageHistory(
+        rag_chain,
+        get_session_history,
+        input_messages_key="input",
+        history_messages_key="chat_history",
+        output_messages_key="answer",
+    )
+
+    var = conversational_rag_chain.invoke(
+        {"input": query, "customer_data": customer_data, "customer_hypothesis": customer_hypothesis},
+        config={
+            "configurable": {"session_id": session}
+        },
+    )["answer"]
+
+    return var
+
 
