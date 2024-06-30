@@ -219,8 +219,8 @@ def getTripsTest():
 
 
 
-@app.route('/getTripsMongo', methods=['POST'])
-def getTripsMongo():
+@app.route('/getTripsMongo1', methods=['POST'])
+def getTripsMongo1():
     llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
  #   llm = ChatAnthropic(model="claude-2.1", temperature=1)
     query = request.json.get('query')
@@ -313,8 +313,8 @@ def getTripsMongo():
 
     return var
 
-@app.route('/getTripsMongo1', methods=['POST'])
-def getTripsMongo1():
+@app.route('/getTripsMongo', methods=['POST'])
+def getTripsMongo():
     # llm = ChatOpenAI(model="gpt-3.5-turbo", temperature=0)
     llm = ChatAnthropic(model="claude-2.1", temperature=1)
     query = request.json.get('query')
